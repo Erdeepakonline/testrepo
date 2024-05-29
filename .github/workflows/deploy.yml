@@ -19,7 +19,7 @@ jobs:
       with:
         server: testdeepak.7searchppc.in
         username: admin_testdeepak
-        password: sga*gO#@9cHsKghJ
+        password: f8fq%fp3oome5#-9
         server-dir: '/public_html/'
         port: 21
         protocol: ftps
