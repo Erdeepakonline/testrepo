@@ -4073,6 +4073,12 @@ class CampaignController extends Controller
             $campaignStatus = $cStatus->status;
             $cStatus->status = $status;
             if ($cStatus->update()) {
+                $activitylog = new Activitylog();
+                $activitylog->uid    = $request->uid;
+                $activitylog->type    = $new_status;
+                $activitylog->description    = '' . $cid . ' is '. $new_status .' Successfully';
+                $activitylog->status    = '1';
+                $activitylog->save();
                 /* Update Campaign Log Start */
                 $camp_log = new CampaignLogs();
                 $camp_log->uid = $adv_code;

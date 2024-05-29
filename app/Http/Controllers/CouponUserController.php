@@ -206,16 +206,22 @@ class CouponUserController extends Controller
     */
 
     public function categoryWiseCouponList(){
+        $currentData = Date('Y-m-d');
         $cpnlist = CouponCategory::select('id','cat_name','visibility','status')->where('status',1)->where('trash', 0)->first();
         if($cpnlist->status == 1 && $cpnlist->visibility == 1){
-            $coupondata = Coupon::select('coupon_code','coupon_color_code','coupon_description')->where('status', 1)->where('user_ids',0)->where('trash',0)->where('coupon_cat', $cpnlist->id)->orderBy('min_bil_amt','asc')->get();
+            $coupondata = Coupon::select('coupon_code','coupon_color_code','coupon_description','end_date')->where('status', 1)->where('user_ids',0)->where('trash',0)
+            ->whereDate('end_date','>=', $currentData)
+            ->where('coupon_cat', $cpnlist->id)->orderBy('min_bil_amt','asc')->get();
             if(count($coupondata)>0){
                 $return['code']    = 200;
                 $return['data'][$cpnlist->cat_name]   = $coupondata;
                 $return['message'] = ' Data successfully';
+            }else{
+                $return['code']    = 101;
+                $return['message'] = 'Something went wrong!';
+                return $return;
             }
-        }
-       else {
+        }else {
             $return['code']    = 101;
             $return['message'] = 'Something went wrong!';
         }

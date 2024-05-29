@@ -41,11 +41,28 @@ class AdFundAdminController extends Controller
       $return['message'] = 'User Not Found!';
       return json_encode($return);
     } else { 
-         if ($payment_mode == 'stripe') {
+        //  if ($payment_mode == 'stripe') {
+        //   if ($usercon->country == 'INDIA') {
+        //     $pct = 3;
+        //     $fee            = ($pct * $amt) / 100;
+        //     $fee_gst        = 0; //(18 * $fee) / 100;
+        //     $gst_fee        = (($fee + $amt) * 18) / 100;
+        //     $processing_fee = $fee;
+        //     $totalpay       = $amt + $processing_fee + $gst_fee;
+        //   } else {
+        //     $pct = 4.3;
+        //     $fee            = $amt * $pct / 100; 
+        //     $gst_fee        = 0;
+        //     $fee_gst        = ((($amt * $pct / 100) * 18) / 100);
+        //     $processing_fee = $fee + $fee_gst;
+        //     $totalpay       = $amt + $processing_fee + $gst_fee;
+        //   }
+        // }
+        if ($payment_mode == 'stripe') {
           if ($usercon->country == 'INDIA') {
             $pct = 3;
             $fee            = ($pct * $amt) / 100;
-            $fee_gst        = (18 * $fee) / 100;
+            $fee_gst        = 0; //(18 * $fee) / 100;
             $gst_fee        = (($fee + $amt) * 18) / 100;
             $processing_fee = $fee;
             $totalpay       = $amt + $processing_fee + $gst_fee;
@@ -53,8 +70,8 @@ class AdFundAdminController extends Controller
             $pct = 4.3;
             $fee            = $amt * $pct / 100; 
             $gst_fee        = 0;
-            $fee_gst        = ((($amt * $pct / 100) * 18) / 100);
-            $processing_fee = $fee + $fee_gst;
+            $fee_gst        = 0; //((($amt * $pct / 100) * 18) / 100);
+            $processing_fee = $fee + ((($amt * $pct / 100) * 18) / 100);
             $totalpay       = $amt + $processing_fee + $gst_fee;
           }
         }
@@ -74,7 +91,7 @@ class AdFundAdminController extends Controller
       }
       if($payment_mode == 'coinpay') {
         $fee            = (0.5 * $amt) / 100;
-        if ($usercon->country == 'INDIA') {
+        if ($usercon->country != 'INDIA') {
           //$fee_gst        = (18 * $fee) / 100;
           $fee_gst        = $fee;
           $gst_fee        = (($fee + $amt) * 18) / 100;
@@ -130,48 +147,48 @@ class AdFundAdminController extends Controller
         $totalpay       = $amt + $processing_fee + $gst_fee;
       }
 
-      if ($payment_mode == 'payu') {
+     if ($payment_mode == 'payu') {
         $fee            = (2 * $amt) / 100;
-        $fee_gst        = (18 * $fee) / 100;
+        $fee_gst        = 0; //(18 * $fee) / 100;
         $processing_fee = $fee + $fee_gst;
         if ($usercon->country == 'INDIA') {
-          $gst_fee        = (18 * $amt) / 100;
+          $gst_fee        = (18 * ($amt + $fee)) / 100;
         } else {
           $gst_fee        = 0;
         }
         $totalpay       = $amt + $processing_fee + $gst_fee;
       }
 
-      if ($payment_mode == 'razorpay') {
+    //   if ($payment_mode == 'razorpay') {
+    //     $fee            = (2 * $amt) / 100;
+    //     $fee_gst        = (18 * $fee) / 100;
+    //     $processing_fee = $fee + $fee_gst;
+    //     if ($usercon->country == 'INDIA') {
+    //       $gst_fee        = (18 * $amt) / 100;
+    //     } else {
+    //       $gst_fee        = 0;
+    //     }
+    //     $totalpay       = $amt + $processing_fee + $gst_fee;
+    //   }
+
+     if ($payment_mode == 'airpay') {
         $fee            = (2 * $amt) / 100;
-        $fee_gst        = (18 * $fee) / 100;
+        $fee_gst        = 0; //(18 * $fee) / 100;
         $processing_fee = $fee + $fee_gst;
         if ($usercon->country == 'INDIA') {
-          $gst_fee        = (18 * $amt) / 100;
+          $gst_fee        = (18 * ($amt + $fee)) / 100;
         } else {
           $gst_fee        = 0;
         }
         $totalpay       = $amt + $processing_fee + $gst_fee;
       }
 
-      if ($payment_mode == 'airpay') {
+    if ($payment_mode == 'phone_pe') {
         $fee            = (2 * $amt) / 100;
-        $fee_gst        = (18 * $fee) / 100;
+        $fee_gst        = 0; //(18 * $fee) / 100;
         $processing_fee = $fee + $fee_gst;
         if ($usercon->country == 'INDIA') {
-          $gst_fee        = (18 * $amt) / 100;
-        } else {
-          $gst_fee        = 0;
-        }
-        $totalpay       = $amt + $processing_fee + $gst_fee;
-      }
-
-      if ($payment_mode == 'phone_pe') {
-        $fee            = (2 * $amt) / 100;
-        $fee_gst        = (18 * $fee) / 100;
-        $processing_fee = $fee + $fee_gst;
-        if ($usercon->country == 'INDIA') {
-          $gst_fee        = (18 * $amt) / 100;
+          $gst_fee        = (18 * ($amt + $fee)) / 100;
         } else {
           $gst_fee        = 0;
         }
@@ -182,14 +199,15 @@ class AdFundAdminController extends Controller
         $fee            = ((4.7 * $amt) / 100) + 0.50;
         if ($usercon->country == 'INDIA') {
           //$fee_gst        = (18 * $fee) / 100;
-          $fee_gst        = (($amt + $fee) * 18) / 100;
-          $gst_fee        =  $fee_gst;
+          $fee_gst        = ($fee * 18) / 100;
+          $gst_fee        = (($fee + $amt) * 18) / 100;
+          $processing_fee = $fee;
         } else {
           $gst_fee        = 0;
           $fee_gst        = 0;
+          $processing_fee = $fee + $fee_gst;
         }
-        $processing_fee = $fee + $fee_gst;
-        $totalpay       = $amt + $processing_fee;
+        $totalpay       = $amt + $processing_fee + $gst_fee;
       }
       $userdata = User::select('website_category', 'email', 'first_name', 'last_name', 'uid', 'account_type')->where('uid', $uid)->first();
       $adfund                     = new Transaction();

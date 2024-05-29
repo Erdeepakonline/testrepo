@@ -272,7 +272,7 @@ class NotificationUserController extends Controller
         $usersdestils = User::where('uid', $userids)->first();
 
         $userid = $usersdestils->uid;
-$page   = $request->page;
+        $page   = $request->page;
         $limit  = $request->lim;
         $pg     = $page - 1;
         $start  = ($pg > 0) ? $limit * $pg : 0;

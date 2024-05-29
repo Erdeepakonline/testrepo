@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Publisher;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\PopupMessage;
 use Illuminate\Validation\Rule;
 use App\Rules\CustomValidationRules;
 use App\Models\Publisher\PubUserPayoutMode;
@@ -1188,5 +1189,20 @@ class PubUserController extends Controller
     }
     return json_encode($return, JSON_NUMERIC_CHECK);
 }
+
+// show publisher popup message
+public function listPopupMessagePub(Request $request)
+  {
+      $support = PopupMessage::select('title','sub_title','image','message','btn_content','btn_link')->where('account_type',2)->where('status',1)->first();
+      if (!empty($support)) {
+          $return['code']    = 200;
+          $return['data']    = $support;
+          $return['message'] = 'popup Message list retrieved successfully!';
+      } else {
+          $return['code']    = 101;
+          $return['message'] = 'Something went wrong!';
+      }
+      return json_encode($return, JSON_NUMERIC_CHECK);
+  }
   
 }

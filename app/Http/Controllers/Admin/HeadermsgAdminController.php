@@ -67,7 +67,7 @@ class HeadermsgAdminController extends Controller
         $start = ($pg > 0) ? $limit * $pg : 0;
         $getList = DB::table('header_messages');
         $row = $getList->count();
-        $data = $getList->offset($start)->orderByDesc('id')->limit($limit)->get();
+        $data = $getList->offset($start)->limit($limit)->get();
         if ($data) {
             $return['code']    = 200;
             $return['data']    = $data;

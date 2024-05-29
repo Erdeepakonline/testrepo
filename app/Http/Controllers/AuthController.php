@@ -13,6 +13,7 @@ use App\Models\User;
 use App\Models\Login_log;
 
 use App\Models\Agent;
+use App\Models\PopupMessage;
 
 use Illuminate\Http\Request;
 
@@ -833,8 +834,8 @@ class AuthController extends Controller
             $return['lname']   = $user->last_name;
 
             $return['email']   = $user->email;
-
-            $return['pub_wallet']  = $user->pub_wallet;
+            $wltAmt = getPubWalletAmount();
+            $return['pub_wallet']   = ($wltAmt) > 0 ? $wltAmt : $user->pub_wallet;
 
           	$return['account_type']  = $user->account_type;
 
@@ -919,8 +920,8 @@ class AuthController extends Controller
             $return['email']   = $user->email;
 
             $return['email']   = $user->email;
-
-            $return['pub_wallet']   = $user->pub_wallet;
+            $wltAmt = getPubWalletAmount();
+            $return['pub_wallet']   = ($wltAmt) > 0 ? $wltAmt : $user->pub_wallet;
 
           	$return['account_type']  = $user->account_type;
 
@@ -1289,6 +1290,21 @@ class AuthController extends Controller
         } else {
             $return['code']    = 101;
             $return['message'] = 'Status is disable data not found!';
+        }
+        return json_encode($return, JSON_NUMERIC_CHECK);
+    }
+
+    // show advertiser popup message
+    public function listPopupMessage(Request $request)
+    {
+        $support = PopupMessage::select('title','sub_title','image','message','btn_content','btn_link')->where('account_type',1)->where('status',1)->first();
+        if (!empty($support)) {
+            $return['code']    = 200;
+            $return['data']    = $support;
+            $return['message'] = 'popup Message list retrieved successfully!';
+        } else {
+            $return['code']    = 101;
+            $return['message'] = 'Something went wrong!';
         }
         return json_encode($return, JSON_NUMERIC_CHECK);
     }

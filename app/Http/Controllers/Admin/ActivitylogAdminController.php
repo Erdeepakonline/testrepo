@@ -23,7 +23,7 @@ class ActivitylogAdminController extends Controller
         if ($src) {
             $activitylogs = Activitylog::select('id', 'uid', 'type', 'description', 'status', 'view', 'created_at')->whereRaw('concat(ss_activitylogs.uid) like ?', "%{$src}%");
         }
-        if ($startDate && $endDate && $src) {
+        if ($startDate && $endDate) {
             $activitylogs = Activitylog::select('id', 'uid', 'type', 'description', 'status', 'view', 'created_at')->whereRaw('concat(ss_activitylogs.uid) like ?', "%{$src}%")->whereDate('created_at', '>=', $nfromdate)
                 ->whereDate('created_at', '<=', $endDate);
         }

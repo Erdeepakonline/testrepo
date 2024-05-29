@@ -107,7 +107,7 @@ class TransactionLogAdminController extends Controller
         $start = ($pg > 0) ? $limit * $pg : 0;
 
         $report = Transaction::select('users.email','users.country','users.auth_provider','users.website_category','transactions.advertiser_code','transactions.fee','transactions.gst',
-            DB::raw('ss_transactions.amount + ss_transactions.fee + ss_transactions.gst as payble_amt'),'transactions.amount as tmaunt','transactions.transaction_id','transactions.payment_mode','transaction_logs.id','transaction_logs.pay_type','transactions.payment_id','transaction_logs.amount','transaction_logs.remark','transaction_logs.created_at','categories.cat_name','transactions.payment_resource'
+            DB::raw('ss_transactions.amount + ss_transactions.fee + ss_transactions.gst as payble_amt'),'transactions.amount as tmaunt','transactions.transaction_id','transactions.payment_mode','transaction_logs.id','transaction_logs.pay_type','transactions.payment_id','transaction_logs.amount','transaction_logs.remark','transaction_logs.created_at','categories.cat_name','transactions.payment_resource','transaction_logs.serial_no'
         )
             ->join('transaction_logs', 'transaction_logs.transaction_id', '=', 'transactions.transaction_id')
             ->join('users', 'users.uid', '=', 'transactions.advertiser_code')
@@ -133,7 +133,7 @@ class TransactionLogAdminController extends Controller
                 ->whereDate('transaction_logs.created_at', '<=', $endDate);
         }
         if ($src) {
-            $report->whereRaw('concat(ss_users.uid,ss_users.email,ss_transactions.transaction_id,ss_transactions.payment_id) like ?', "%{$src}%");
+            $report->whereRaw('concat(ss_users.uid,ss_users.email,ss_transactions.transaction_id,ss_transactions.payment_id,ss_transaction_logs.serial_no) like ?', "%{$src}%");
         }
         $report->orderBy('transaction_logs.id', 'desc');
         $row = $report->count();
@@ -245,7 +245,7 @@ class TransactionLogAdminController extends Controller
             ->join('users', 'users.uid', '=', 'transactions.advertiser_code')
             ->where('transactions.transaction_id', $transactionid)
             ->first();
-        if($report->payment_mode == 'bitcoin' || $report->payment_mode == 'stripe' || $report->payment_mode == 'now_payments' || $report->payment_mode == 'coinpay' )
+        if($report->payment_mode == 'bitcoin' || $report->payment_mode == 'stripe' || $report->payment_mode == 'now_payments' || $report->payment_mode == 'coinpay' || $report->payment_mode == 'tazapay' )
         {
             $report->fee = $report->fee;
         }else{

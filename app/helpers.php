@@ -14,7 +14,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redis;
 use Carbon\Carbon;
-use PDF;
+// use PDF;
 
 function randomuid($utype = '')
 { 
