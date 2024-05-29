@@ -43,7 +43,9 @@ use Illuminate\Support\Facades\Storage;
       return 'Cache Cleared';
     })->name('clear');
   
-  
+  Route::get('deepak',function(){
+    echo 'Test Deepak';
+  });
     /*  Autometic Deactive Coupon */
     Route::get('/today/coupon/deactive',[CouponUserController::class,'tdaycpmdeactive']);
     /*  Campaign Deduct Amount User Wallet   */
