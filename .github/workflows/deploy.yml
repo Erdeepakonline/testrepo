@@ -1,0 +1,25 @@
+name: Deploy on push to staging server
+
+on:
+  push:
+    branches:
+      - staging
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+      
+    - name: Deploy to FTP
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      with:
+        server: deepaktst.7searchppc.in
+        username: admin_deepak
+        password: 1akqcMcieIlF38Aq
+        server-dir: '/public_html/'
+        port: 21
+        protocol: ftps
