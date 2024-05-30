@@ -15,7 +15,7 @@ public/hot
 public_html/storage
 public_html/hot
 public
-
+resources
 app/Http/Controllers/Payment
 app/Http/Controllers/StripePayController.php
 app/Http/Controllers/Advertisers/AppPaymentPhonepeController.php
